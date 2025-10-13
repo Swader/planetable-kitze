@@ -14,15 +14,8 @@
       if(document.getElementById('footer')){
         document.querySelector('#footer').style.display = 'block';
       }
-      console.log("Current article_type: {{ article_type }}")
-      {% if article_type == 0 %}
-      breadcrumb([
-        { text: "{{ planet.name|escapejs }}", url: '../' },
-      ]);
-      {% endif %}
-    } else {
-
     }
+    
     const todos = document.querySelectorAll('li:has(input[type="checkbox"])');
     let i = 1;
     todos.forEach(item => {

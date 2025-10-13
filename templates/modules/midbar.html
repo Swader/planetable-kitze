@@ -1,0 +1,113 @@
+<aside id="kitze-midbar" class="kitze-midbar">
+  <div class="kitze-midbar-header">
+    <div class="kitze-midbar-avatar">
+      {% if has_avatar %}
+      <img src="{{ assets_prefix }}avatar.png" class="kitze-midbar-avatar-img" />
+      {% endif %}
+    </div>
+    <h1 class="kitze-midbar-name">{{ planet.name|escape }}</h1>
+    {% if page_description_html.count > 0 %}
+    <div class="kitze-midbar-about">{{ page_description_html }}</div>
+    {% endif %}
+    
+    <div class="kitze-midbar-social">
+      {% if planet.githubUsername.count > 0 %}
+      <a href="https://github.com/{{ planet.githubUsername|escapejs }}" target="_blank" class="kitze-midbar-social-link">
+        <img src="{{ assets_prefix }}assets/github.svg" alt="GitHub" />
+      </a>
+      {% endif %}
+      {% if planet.twitterUsername.count > 0 %}
+      <a href="https://twitter.com/{{ planet.twitterUsername|escapejs }}" target="_blank" class="kitze-midbar-social-link">
+        <img src="{{ assets_prefix }}assets/twitter.svg" alt="Twitter" />
+      </a>
+      {% endif %}
+    </div>
+    
+    <div id="kitze-midbar-stats" class="kitze-midbar-stats"></div>
+  </div>
+  
+  <div id="kitze-midbar-upcoming" class="kitze-midbar-section"></div>
+  <div id="kitze-midbar-projects" class="kitze-midbar-section"></div>
+  <div id="kitze-midbar-ctas" class="kitze-midbar-ctas"></div>
+</aside>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const assetsPrefix = '{{ assets_prefix }}';
+    
+    fetch(assetsPrefix + 'assets/kitze-midbar.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data) return;
+        
+        // Render stats
+        if (data.stats) {
+          const statsEl = document.getElementById('kitze-midbar-stats');
+          statsEl.innerHTML = `
+            <div class="kitze-midbar-stat">
+              <div class="kitze-midbar-stat-value">${data.stats.followers}</div>
+              <div class="kitze-midbar-stat-label">Followers</div>
+            </div>
+            <div class="kitze-midbar-stat">
+              <div class="kitze-midbar-stat-value">${data.stats.subscribers}</div>
+              <div class="kitze-midbar-stat-label">Subscribers</div>
+            </div>
+            <div class="kitze-midbar-stat">
+              <div class="kitze-midbar-stat-value">${data.stats.views}</div>
+              <div class="kitze-midbar-stat-label">Views</div>
+            </div>
+          `;
+        }
+        
+        // Render upcoming
+        if (data.upcoming && data.upcoming.length) {
+          const upcomingEl = document.getElementById('kitze-midbar-upcoming');
+          upcomingEl.innerHTML = `
+            <h2 class="kitze-midbar-title">UPCOMING TALKS</h2>
+            <div class="kitze-midbar-upcoming-list">
+              ${data.upcoming.map(item => `
+                <${item.url ? 'a href="' + item.url + '" target="_blank"' : 'div'} class="kitze-midbar-upcoming-item">
+                  <div class="kitze-midbar-upcoming-date">${item.date}</div>
+                  <div class="kitze-midbar-upcoming-info">
+                    <div class="kitze-midbar-upcoming-title">${item.title}</div>
+                    <div class="kitze-midbar-upcoming-location">
+                      ${item.flag} ${item.location}
+                    </div>
+                  </div>
+                </${item.url ? 'a' : 'div'}>
+              `).join('')}
+            </div>
+          `;
+        }
+        
+        // Render projects
+        if (data.projects && data.projects.length) {
+          const projectsEl = document.getElementById('kitze-midbar-projects');
+          projectsEl.innerHTML = `
+            <h2 class="kitze-midbar-title">MY PROJECTS</h2>
+            <div class="kitze-midbar-projects-list">
+              ${data.projects.map(item => `
+                <${item.url ? 'a href="' + item.url + '" target="_blank"' : 'div'} class="kitze-midbar-project-item">
+                  <span class="kitze-midbar-project-icon">${item.icon}</span>
+                  <span class="kitze-midbar-project-title">${item.title}</span>
+                </${item.url ? 'a' : 'div'}>
+              `).join('')}
+            </div>
+          `;
+        }
+        
+        // Render CTAs
+        if (data.ctas && data.ctas.length) {
+          const ctasEl = document.getElementById('kitze-midbar-ctas');
+          ctasEl.innerHTML = data.ctas.map(item => `
+            <a href="${item.url}" ${item.url.startsWith('http') ? 'target="_blank"' : ''} class="kitze-midbar-cta ${item.primary ? 'kitze-midbar-cta-primary' : 'kitze-midbar-cta-secondary'}">
+              <span>${item.icon}</span>
+              <span>${item.title}</span>
+            </a>
+          `).join('');
+        }
+      })
+      .catch(() => {});
+  });
+</script>
+

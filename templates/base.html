@@ -17,61 +17,6 @@
         assetsPrefix: '{{ assets_prefix }}',
       };
 
-      function breadcrumb(stubs) {
-        let container = document.createElement('div');
-        container.classList.add('breadcrumb')
-        let inner = document.createElement('div');
-        inner.classList.add('breadcrumb-inner');
-        container.appendChild(inner);
-        {% if has_avatar %}
-        let avatarHTML = `
-          <div class="breadcrumb-avatar">
-            <a href="{{ assets_prefix }}"><img src="{{ assets_prefix }}avatar.png" height="16" class="breadcrumb-avatar-image" border="0" /></a>
-          </div>
-        `;
-        inner.innerHTML = avatarHTML;
-        {% endif %}
-        if (!stubs || !stubs.length) {
-          return;
-        }
-
-        const getStubElem = (stub) => {
-          let elem;
-          if (stub.url) {
-            elem = document.createElement('a');
-            elem.href = stub.url;
-          } else {
-            elem = document.createElement('span');
-          }
-          elem.innerText = stub.text;
-          if (stub.classes) {
-            elem.classList.add(...stub.classes);
-          }
-          return elem;
-        };
-
-        const getSeparatorElem = () => {
-          let elem = document.createElement('span');
-          elem.innerText = '›';
-          elem.classList.add("chevron");
-          return elem;
-        }
-
-        inner.append(getStubElem(stubs[0]));
-        inner.append(getSeparatorElem());
-        for (let i = 1; i < stubs.length; i++)  {
-          inner.append(getStubElem(stubs[i]));
-          if (i < stubs.length - 1) {
-            inner.append(getSeparatorElem());
-          }
-        }
-
-        let main = document.querySelector('.main');
-        main.style.paddingTop = '10px';
-
-        let wrapper = document.querySelector('.wrapper');
-        wrapper.insertAdjacentElement('afterbegin', container);
-      }
     </script>
     <script>
       // Kitze sidebar + mobile sheet rendering
@@ -105,15 +50,46 @@
           };
         }
 
-        function setActiveState(anchor, href) {
+        function setActiveState(anchor, href, itemType, itemId) {
           if (!href) return;
+          
           try {
-            const aUrl = new URL(href, window.location.origin);
-            const here = window.location.pathname.replace(/index\.html$/, '/');
-            if (aUrl.pathname === here || (aUrl.pathname !== '/' && here.startsWith(aUrl.pathname))) {
+            const here = window.location.pathname;
+            const url = new URL(href, window.location.origin);
+            const targetPath = url.pathname;
+            const isExternal = url.origin !== window.location.origin;
+            
+            // Skip external links
+            if (isExternal) return;
+            
+            // If on /home/ -> ONLY activate home icon
+            if (here.includes('/home/')) {
+              if (targetPath.includes('/home/')) {
+                anchor.classList.add('is-active');
+              }
+              return; // Don't check anything else
+            }
+            
+            // Blog icon (root /) - activate if on root OR any blog post
+            if (targetPath === '/' || targetPath === '') {
+              // Check if we're NOT on a known page
+              const knownPages = ['/projects/', '/tools/', '/tags', '/archive'];
+              const isKnownPage = knownPages.some(page => here.includes(page));
+              const isTagHtml = here.match(/\/[^\/]+\.html$/);
+              
+              if (!isKnownPage && !isTagHtml) {
+                anchor.classList.add('is-active');
+              }
+              return;
+            }
+            
+            // All other routes - simple startsWith match
+            if (here.includes(targetPath.replace(/\/$/, ''))) {
               anchor.classList.add('is-active');
             }
-          } catch (_) {}
+          } catch (e) {
+            console.error('Active state error:', e);
+          }
         }
 
         function openSheet() {
@@ -237,7 +213,7 @@
                 element.setAttribute('data-id', item.id);
                 element.setAttribute('title', item.title || item.id);
                 if (item.type === 'link') element.setAttribute('target', '_blank');
-                setActiveState(element, href);
+                setActiveState(element, href, item.type, item.id);
               }
 
               const icon = document.createElement('img');
@@ -372,6 +348,7 @@
     <div class="wrapper">
       <div class="layout">
         <aside id="kitze-sidebar" class="kitze-sidebar" aria-label="Site" style="display: none;"></aside>
+        {% include 'modules/midbar.html' %}
         <div class="main">
           <div class="mobile-bar">
             <button id="kitze-menu" class="kitze-menu" aria-controls="kitze-sheet" aria-expanded="false" aria-label="Open menu">☰</button>
@@ -390,3 +367,4 @@
     {% if custom_code_body_end.count > 0 %}{{ custom_code_body_end }}{% endif %}
   </body>
 </html>
+

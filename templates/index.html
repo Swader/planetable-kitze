@@ -22,22 +22,43 @@
   <div class="tag-count">{{ articles.count }} article{% if articles.count > 1 %}s{% endif %}</div>
 </div>
 {% endif %}
-<div class="items">
+<div class="blog-grid">
   {% for article in articles %}
-  <div class="item">
-    {% if article.heroImage != nil %}
-    <!--<div class="item-hero-image"><a href="{{ article.id }}/"><img src="{{ article.id }}/{{ article.heroImage }}"></a></div>-->
-    {% endif %}
-    <div class="item-main">
-      {% if article.title.count > 0 %}<div class="item-title"><a href=".{{ article.link }}">{{ article.title|escape }}</a></div>{% endif %}
-      {% if article.title.count == 0 and article.contentRendered.count > 0 %}<div>{{ article.contentRendered }}</div>{% endif %}
-      <div class="item-info">
-        <div class="item-date">{{ article.created|ymd }}</div>
-        {% if article.hasVideo %}<img src="{{ assets_prefix }}assets/video.svg" width="1em" class="item-video-icon" alt="Video">{% endif %}
-        {% if article.hasAudio %}<img src="{{ assets_prefix }}assets/microphone.svg" width="1em" class="item-audio-icon" alt="Video">{% endif %}
+  <article class="blog-card">
+    <a href=".{{ article.link }}" class="blog-card-link">
+      {% if article.heroImage != nil %}
+      <div class="blog-card-image">
+        <img src="{{ article.id }}/{{ article.heroImage }}" alt="{{ article.title|escape }}" />
+        {% if article.hasVideo %}
+        <span class="blog-card-badge blog-card-badge-video">
+          <img src="{{ assets_prefix }}assets/video.svg" width="12" alt="Video" />
+        </span>
+        {% endif %}
+        {% if article.hasAudio %}
+        <span class="blog-card-badge blog-card-badge-audio">
+          <img src="{{ assets_prefix }}assets/microphone.svg" width="12" alt="Audio" />
+        </span>
+        {% endif %}
       </div>
-    </div>
-  </div>
+      {% endif %}
+      <div class="blog-card-content">
+        <div class="blog-card-date">{{ article.created|ymd }}</div>
+        {% if article.title.count > 0 %}
+        <h3 class="blog-card-title">{{ article.title|escape }}</h3>
+        {% endif %}
+        {% if article.summary.count > 0 %}
+        <p class="blog-card-summary">{{ article.summary|escape }}</p>
+        {% endif %}
+        {% if article.tags.count > 0 %}
+        <div class="blog-card-tags">
+          {% for tag in article.tags %}
+          <span class="blog-card-tag">{{ article.tags[tag] }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </a>
+  </article>
   {% endfor %}
 </div>
 {% include 'modules/pages.html' %}
