@@ -1,8 +1,11 @@
 {
   "stats": {
-    "followers": "74.5K",
+    "followers": "55.5K",
+    "followersUrl": "https://x.com/bitfalls",
     "subscribers": "480",
-    "views": "25k"
+    "subscribersUrl": "https://www.youtube.com/channel/UCFVRzQdbBO-TbGzeV7iDuCw/",
+    "views": "25k",
+    "viewsUrl": "https://www.youtube.com/channel/UCFVRzQdbBO-TbGzeV7iDuCw/"
   },
   "upcoming": [
     {
@@ -12,14 +15,6 @@
       "location": "Buenos Aires, Argentina",
       "flag": "🇦🇷",
       "url": "https://agenticzero.xyz/"
-    },
-    {
-      "type": "talk",
-      "title": "Money Motion 2026",
-      "date": "MAR 11-12",
-      "location": "Zagreb, Croatia",
-      "flag": "🇭🇷",
-      "url": "https://www.money-motion.eu/"
     }
   ],
   "projects": [

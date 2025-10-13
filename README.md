@@ -11,7 +11,13 @@ A Planetable theme inspired by [kitze.io](https://kitze.io) featuring a 3-column
 
 ## Configuration Files
 
-### 1. Sidebar Navigation (`assets/kitze.config.json`)
+You can configure the theme in two ways:
+1. **JSON files** (recommended): Edit `assets/kitze.config.json` and `assets/kitze-midbar.json`
+2. **Custom Code** (advanced): Add JavaScript to Planet's custom code in `<head>` section
+
+### Option 1: JSON Files (Recommended)
+
+#### Sidebar Navigation (`assets/kitze.config.json`)
 
 Controls the left sidebar navigation items:
 
@@ -143,6 +149,47 @@ Tap the menu button (☰) to open a bottom-sheet with a grid of navigation items
 - **900-1200px**: 2-column (sidebar + content, mid-bar hidden)
 - **<900px**: 1-column mobile with bottom sheet menu
 
+### Option 2: Custom Code (Advanced)
+
+You can override the configuration by adding JavaScript to Planet's **Custom Code** in the `<head>` section:
+
+**Sidebar Configuration:**
+```html
+<script>
+window.KITZE_CONFIG = {
+  "sidebar": [
+    { "id": "home", "title": "Home", "type": "page", "slug": "home", "icon": "home.svg" },
+    { "id": "blog", "title": "Blog", "type": "index", "icon": "pencil.svg" }
+  ]
+};
+</script>
+```
+
+**Mid-bar Configuration:**
+```html
+<script>
+window.KITZE_MIDBAR_CONFIG = {
+  "stats": {
+    "followers": "100K",
+    "followersUrl": "https://x.com/yourhandle",
+    "subscribers": "10K",
+    "views": "500K"
+  },
+  "upcoming": [],
+  "projects": [],
+  "ctas": []
+};
+</script>
+```
+
+**Benefits:**
+- Change config without editing files
+- Different config per Planet site
+- Override defaults dynamically
+- Config managed in Planet UI
+
+**Priority:** Custom code config takes precedence over JSON files.
+
 ## Planet Variables
 
 The theme automatically uses these Planet variables:
@@ -152,3 +199,6 @@ The theme automatically uses these Planet variables:
 - `planet.twitterUsername` - Twitter profile link
 - `planet.githubUsername` - GitHub profile link
 - `assets_prefix` - Asset path handling
+- `custom_code_head` - Custom JavaScript/CSS injection
+- `custom_code_body_start` - Custom code at body start
+- `custom_code_body_end` - Custom code at body end

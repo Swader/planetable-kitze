@@ -41,10 +41,18 @@
   document.addEventListener('DOMContentLoaded', () => {
     const assetsPrefix = '{{ assets_prefix }}';
     
-    fetch(assetsPrefix + 'assets/kitze-midbar.json')
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (!data) return;
+    // Check for inline config first (from custom code in head)
+    if (window.KITZE_MIDBAR_CONFIG) {
+      renderMidbar(window.KITZE_MIDBAR_CONFIG);
+    } else {
+      // Fallback to JSON file
+      fetch(assetsPrefix + 'assets/kitze-midbar.json')
+        .then(r => r.ok ? r.json() : null)
+        .then(data => data && renderMidbar(data))
+        .catch(() => {});
+    }
+    
+    function renderMidbar(data) {
         
         // Render stats
         if (data.stats) {
@@ -119,8 +127,7 @@
             </a>
           `).join('');
         }
-      })
-      .catch(() => {});
+    }
   });
 </script>
 

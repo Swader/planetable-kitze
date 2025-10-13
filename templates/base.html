@@ -330,11 +330,16 @@
           }
         }
 
-        // Fetch config
-        fetch(assetsPrefix + 'assets/kitze.config.json')
-          .then((r) => (r.ok ? r.json() : null))
-          .then((j) => j && renderFromConfig(j))
-          .catch(() => {});
+        // Check for inline config first (from custom code in head)
+        if (window.KITZE_CONFIG) {
+          renderFromConfig(window.KITZE_CONFIG);
+        } else {
+          // Fallback to JSON file
+          fetch(assetsPrefix + 'assets/kitze.config.json')
+            .then((r) => (r.ok ? r.json() : null))
+            .then((j) => j && renderFromConfig(j))
+            .catch(() => {});
+        }
       });
     </script>
     {% if has_avatar %}
