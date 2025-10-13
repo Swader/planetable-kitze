@@ -1,0 +1,13 @@
+{
+  "name": "Kitze",
+  "description": "A kitze.io inspired theme for Planet",
+  "author": "@bitfalls",
+  "authorWebsite": "https://bruno.eth.link",
+  "version": "1.0",
+  "idealItemsPerPage": 10,
+  "generateIndexPagination": true,
+  "generateTagPages": true,
+  "generateArchive": true,
+  "buildNumber": 1,
+  "themeToggle": true
+}
