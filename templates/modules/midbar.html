@@ -21,6 +21,12 @@
         <img src="{{ assets_prefix }}assets/twitter.svg" alt="Twitter" />
       </a>
       {% endif %}
+      <a href="https://www.youtube.com/channel/UCFVRzQdbBO-TbGzeV7iDuCw/" target="_blank" class="kitze-midbar-social-link">
+        <img src="{{ assets_prefix }}assets/video.svg" alt="YouTube" />
+      </a>
+      <a href="{{ assets_prefix }}rss.xml" target="_blank" class="kitze-midbar-social-link">
+        <img src="{{ assets_prefix }}assets/rss.svg" alt="RSS" />
+      </a>
     </div>
     
     <div id="kitze-midbar-stats" class="kitze-midbar-stats"></div>
@@ -43,19 +49,23 @@
         // Render stats
         if (data.stats) {
           const statsEl = document.getElementById('kitze-midbar-stats');
+          const followersUrl = data.stats.followersUrl || 'https://x.com/bitfalls';
+          const subscribersUrl = data.stats.subscribersUrl || 'https://www.youtube.com/channel/UCFVRzQdbBO-TbGzeV7iDuCw/';
+          const viewsUrl = data.stats.viewsUrl || 'https://www.youtube.com/channel/UCFVRzQdbBO-TbGzeV7iDuCw/';
+          
           statsEl.innerHTML = `
-            <div class="kitze-midbar-stat">
+            <a href="${followersUrl}" target="_blank" class="kitze-midbar-stat">
               <div class="kitze-midbar-stat-value">${data.stats.followers}</div>
               <div class="kitze-midbar-stat-label">Followers</div>
-            </div>
-            <div class="kitze-midbar-stat">
+            </a>
+            <a href="${subscribersUrl}" target="_blank" class="kitze-midbar-stat">
               <div class="kitze-midbar-stat-value">${data.stats.subscribers}</div>
               <div class="kitze-midbar-stat-label">Subscribers</div>
-            </div>
-            <div class="kitze-midbar-stat">
+            </a>
+            <a href="${viewsUrl}" target="_blank" class="kitze-midbar-stat">
               <div class="kitze-midbar-stat-value">${data.stats.views}</div>
               <div class="kitze-midbar-stat-label">Views</div>
-            </div>
+            </a>
           `;
         }
         
@@ -89,7 +99,10 @@
               ${data.projects.map(item => `
                 <${item.url ? 'a href="' + item.url + '" target="_blank"' : 'div'} class="kitze-midbar-project-item">
                   <span class="kitze-midbar-project-icon">${item.icon}</span>
-                  <span class="kitze-midbar-project-title">${item.title}</span>
+                  <div class="kitze-midbar-project-text">
+                    <span class="kitze-midbar-project-title">${item.title}</span>
+                    ${item.description ? '<span class="kitze-midbar-project-desc">' + item.description + '</span>' : ''}
+                  </div>
                 </${item.url ? 'a' : 'div'}>
               `).join('')}
             </div>

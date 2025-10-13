@@ -4,10 +4,8 @@
     { "id": "home", "title": "Home", "type": "page", "slug": "home", "icon": "home.svg", "separator": true },
     { "id": "blog", "title": "Blog", "type": "index", "icon": "pencil.svg" },
     { "id": "videos", "title": "Videos", "type": "tag", "tag": "video", "icon": "video.svg" },
-    { "id": "podcasts", "title": "Podcasts", "type": "tag", "tag": "podcast", "icon": "microphone.svg" },
     { "id": "projects", "title": "Projects", "type": "page", "slug": "projects", "icon": "layers.svg" },
     { "id": "tools", "title": "Tools", "type": "page", "slug": "tools", "icon": "gear.svg" },
-    { "id": "meet", "title": "Meet", "type": "link", "href": "https://cal.com/", "icon": "people.svg" },
     { "id": "theme", "title": "Theme", "type": "theme", "icon": "theme.svg", "separator": true }
   ]
 }

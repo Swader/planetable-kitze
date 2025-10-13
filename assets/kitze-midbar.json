@@ -26,11 +26,13 @@
     {
       "icon": "🤑",
       "title": "Shilld",
+      "description": "Know your influencers - who's paid to talk?",
       "url": "https://shilld.xyz"
     },
     {
       "icon": "👤",
       "title": "Shadowbreak",
+      "description": "Documenting an escape from X's shadowban",
       "url": "https://shadowbreak.substack.com"
     }
   ],
@@ -38,7 +40,7 @@
     {
       "icon": "🛍️",
       "title": "Merch",
-      "url": "",
+      "url": "https://shop.bitfalls.com",
       "primary": false
     }
   ]
