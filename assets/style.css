@@ -284,6 +284,40 @@ hr {
     margin-bottom: 0px;
 }
 
+/* Blog tag filter */
+.blog-tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.blog-tag-btn {
+    padding: 8px 14px;
+    border: 1px solid var(--border-color);
+    background: var(--nav-item-background-color);
+    color: var(--foreground-color);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.blog-tag-btn:hover {
+    background: var(--nav-item-hover-background-color);
+    border-color: var(--link-color);
+}
+
+.blog-tag-btn.active {
+    background: var(--nav-current-background-color);
+    color: var(--nav-current-foreground-color);
+    border-color: var(--nav-current-background-color);
+}
+
 /* Blog grid tiles */
 .blog-grid {
     display: grid;
@@ -620,8 +654,27 @@ img.avatar {
     color: var(--background-color);
 }
 
-.kitze-nav-item.is-active .kitze-nav-icon {
-    filter: invert(100%);
+/* Light theme: active icon should be white (invert the dark icon) */
+.theme-light .kitze-nav-item.is-active .kitze-nav-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* Dark theme: active icon should be black (no invert, just darken) */
+.theme-dark .kitze-nav-item.is-active .kitze-nav-icon {
+    filter: brightness(0);
+}
+
+/* Auto theme: follow system preference */
+@media (prefers-color-scheme: light) {
+    .theme-auto .kitze-nav-item.is-active .kitze-nav-icon {
+        filter: brightness(0) invert(1);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .theme-auto .kitze-nav-item.is-active .kitze-nav-icon {
+        filter: brightness(0);
+    }
 }
 
 .kitze-nav-icon {
@@ -646,7 +699,7 @@ img.avatar {
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    background: var(--nav-item-background-color);
+    background: transparent;
     color: var(--foreground-secondary-color);
     position: relative;
 }

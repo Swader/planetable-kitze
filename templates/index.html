@@ -22,13 +22,16 @@
   <div class="tag-count">{{ articles.count }} article{% if articles.count > 1 %}s{% endif %}</div>
 </div>
 {% endif %}
+
+<div id="blog-tag-filter" class="blog-tag-filter" style="display: none;"></div>
+
 <div class="blog-grid">
   {% for article in articles %}
-  <article class="blog-card">
+  <article class="blog-card" data-tags="{% for tag in article.tags %}{{ tag }}{% if forloop.last == false %},{% endif %}{% endfor %}">
     <a href=".{{ article.link }}" class="blog-card-link">
       {% if article.heroImage != nil %}
       <div class="blog-card-image">
-        <img src="{{ article.id }}/{{ article.heroImage }}" alt="{{ article.title|escape }}" />
+        <img src="{{ article.heroImage }}" alt="{{ article.title|escape }}" />
         {% if article.hasVideo %}
         <span class="blog-card-badge blog-card-badge-video">
           <img src="{{ assets_prefix }}assets/video.svg" width="12" alt="Video" />
@@ -62,4 +65,69 @@
   {% endfor %}
 </div>
 {% include 'modules/pages.html' %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.blog-card');
+    const filterContainer = document.getElementById('blog-tag-filter');
+    
+    // Collect all unique tags (excluding "blog")
+    const allTags = new Set();
+    cards.forEach(card => {
+      const tags = card.getAttribute('data-tags');
+      if (tags) {
+        tags.split(',').forEach(tag => {
+          const trimmed = tag.trim();
+          if (trimmed && trimmed !== 'blog') {
+            allTags.add(trimmed);
+          }
+        });
+      }
+    });
+    
+    // Only show filter if there are tags
+    if (allTags.size === 0) return;
+    
+    filterContainer.style.display = 'block';
+    const activeTags = new Set();
+    
+    // Render tag buttons
+    const tagButtons = Array.from(allTags).sort().map(tag => {
+      const btn = document.createElement('button');
+      btn.className = 'blog-tag-btn';
+      btn.textContent = tag;
+      btn.setAttribute('data-tag', tag);
+      
+      btn.addEventListener('click', () => {
+        if (activeTags.has(tag)) {
+          activeTags.delete(tag);
+          btn.classList.remove('active');
+        } else {
+          activeTags.add(tag);
+          btn.classList.add('active');
+        }
+        filterPosts();
+      });
+      
+      return btn;
+    });
+    
+    tagButtons.forEach(btn => filterContainer.appendChild(btn));
+    
+    function filterPosts() {
+      if (activeTags.size === 0) {
+        // Show all posts
+        cards.forEach(card => card.style.display = 'flex');
+      } else {
+        // Show only posts that have ALL active tags
+        cards.forEach(card => {
+          const cardTags = card.getAttribute('data-tags').split(',').map(t => t.trim());
+          const hasAllTags = Array.from(activeTags).every(tag => cardTags.includes(tag));
+          card.style.display = hasAllTags ? 'flex' : 'none';
+        });
+      }
+    }
+  });
+</script>
+
 {% endblock %}

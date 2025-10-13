@@ -1,109 +1,40 @@
 {
   "stats": {
     "followers": "74.5K",
-    "subscribers": "7.5K",
-    "views": "251K"
+    "subscribers": "480",
+    "views": "25k"
   },
   "upcoming": [
     {
       "type": "talk",
-      "title": "React Native London",
-      "date": "NOV 13",
-      "location": "London, UK",
-      "flag": "🇬🇧",
-      "url": ""
-    },
-    {
-      "type": "talk",
-      "title": "AI Engineer Code Summit",
+      "title": "Devconnect - AgenticZero",
       "date": "NOV 20",
-      "location": "New York, NY",
-      "flag": "🇺🇸",
-      "url": ""
+      "location": "Buenos Aires, Argentina",
+      "flag": "🇦🇷",
+      "url": "https://agenticzero.xyz/"
     },
     {
       "type": "talk",
-      "title": "React Paris",
-      "date": "MAR 26",
-      "location": "Paris, France",
-      "flag": "🇫🇷",
-      "url": ""
+      "title": "Money Motion 2026",
+      "date": "MAR 11-12",
+      "location": "Zagreb, Croatia",
+      "flag": "🇭🇷",
+      "url": "https://www.money-motion.eu/"
     }
   ],
   "projects": [
     {
-      "icon": "📱",
-      "title": "Sizzy",
-      "url": ""
+      "icon": "🤑",
+      "title": "Shilld",
+      "url": "https://shilld.xyz"
     },
     {
-      "icon": "🍱",
-      "title": "Benji",
-      "url": ""
-    },
-    {
-      "icon": "🔗",
-      "title": "Zero To Shipped",
-      "url": ""
-    },
-    {
-      "icon": "⚛️",
-      "title": "React Academy",
-      "url": ""
-    },
-    {
-      "icon": "📚",
-      "title": "Glink",
-      "url": ""
-    },
-    {
-      "icon": "🍿",
-      "title": "Popcorner",
-      "url": ""
-    },
-    {
-      "icon": "🎭",
-      "title": "Mememes",
-      "url": ""
-    },
-    {
-      "icon": "🎣",
-      "title": "Hookz",
-      "url": ""
-    },
-    {
-      "icon": "🦸",
-      "title": "Marvel Champions Digital",
-      "url": ""
-    },
-    {
-      "icon": "🍣",
-      "title": "JSUI",
-      "url": ""
-    },
-    {
-      "icon": "😴",
-      "title": "Lazyhuman",
-      "url": ""
-    },
-    {
-      "icon": "💰",
-      "title": "Kaching",
-      "url": ""
-    },
-    {
-      "icon": "👪",
-      "title": "Parentlist",
-      "url": ""
+      "icon": "👤",
+      "title": "Shadowbreak",
+      "url": "https://shadowbreak.substack.com"
     }
   ],
   "ctas": [
-    {
-      "icon": "👥",
-      "title": "Meet",
-      "url": "https://cal.com/",
-      "primary": true
-    },
     {
       "icon": "🛍️",
       "title": "Merch",
