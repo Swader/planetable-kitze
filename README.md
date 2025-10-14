@@ -190,6 +190,53 @@ window.KITZE_MIDBAR_CONFIG = {
 
 **Priority:** Custom code config takes precedence over JSON files.
 
+## Video Gallery
+
+For video showcase pages (like `/videos/`), add this to your page content:
+
+```html
+<!-- Category filter (auto-generated) -->
+<div id="video-category-filter" class="video-category-filter"></div>
+
+<!-- Loading indicator -->
+<div id="video-loading" class="video-loading" style="display:none;">Loading videos...</div>
+
+<!-- Video grid (auto-populated) -->
+<div id="video-grid" class="video-grid"></div>
+
+<!-- Video configuration -->
+<script>
+window.KITZE_VIDEOS = {
+  "videos": [
+    {
+      "id": "tOpY4dCWzJM",
+      "date": "Dec 04, 2024",
+      "categories": ["Polkadot", "Governance", "Web3"]
+    },
+    {
+      "id": "ZkL5xuNVAS4",
+      "date": "Jan 11, 2024",
+      "categories": ["Webdev", "Best practices", "Decentralization"]
+    }
+  ]
+};
+</script>
+
+<!-- Load video gallery script -->
+<script src="../assets/videos.js"></script>
+```
+
+**How it works:**
+1. Provide YouTube video IDs and categories
+2. Script automatically fetches title and thumbnail from YouTube
+3. Generates filterable video grid
+4. Click categories to filter videos
+
+**Video Object:**
+- `id` (required): YouTube video ID
+- `date` (optional): Display date
+- `categories` (optional): Array of category tags for filtering
+
 ## Planet Variables
 
 The theme automatically uses these Planet variables:
