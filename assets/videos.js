@@ -37,6 +37,16 @@
     }
   }
 
+  // Parse date string to Date object
+  function parseDate(dateStr) {
+    if (!dateStr) return new Date(0);
+    try {
+      return new Date(dateStr);
+    } catch (e) {
+      return new Date(0);
+    }
+  }
+
   // Build video object with metadata
   async function buildVideoData() {
     const videos = config.videos || [];
@@ -49,11 +59,16 @@
         thumbnail: meta.thumbnail,
         author: meta.author,
         date: video.date || '',
+        dateObj: parseDate(video.date),
         categories: video.categories || []
       };
     });
     
     allVideos = await Promise.all(promises);
+    
+    // Sort by date (newest first)
+    allVideos.sort((a, b) => b.dateObj - a.dateObj);
+    
     return allVideos;
   }
 

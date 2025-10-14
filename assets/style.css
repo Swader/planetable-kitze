@@ -206,7 +206,6 @@ hr {
 
 
 .main {
-    width: 100%;
     padding: 20px;
     color: var(--foreground-color);
 }
@@ -305,9 +304,6 @@ hr {
     flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 24px;
-    max-width: var(--content-max-width);
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .blog-tag-btn {
@@ -336,10 +332,8 @@ hr {
 /* Blog grid tiles */
 .blog-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 24px;
-    max-width: var(--content-max-width);
-    margin: 0 auto;
 }
 
 .blog-card {
@@ -422,6 +416,8 @@ hr {
     margin: 0;
     line-height: 1.4;
     color: var(--foreground-color);
+    word-break: keep-all;
+    overflow-wrap: anywhere;
 }
 
 .blog-card-summary {
@@ -623,11 +619,11 @@ img.avatar {
 }
 /* Kitze layout */
 .layout {
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
+    min-height: 100vh;
     display: grid;
     grid-template-columns: var(--sidebar-width) 400px 1fr;
-    gap: 20px;
+    gap: 0;
 }
 
 .kitze-sidebar {
@@ -1230,7 +1226,7 @@ img.avatar {
 
 .video-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 24px;
 }
 
@@ -1255,7 +1251,6 @@ img.avatar {
     width: 100%;
     aspect-ratio: 16/9;
     position: relative;
-    overflow: hidden;
     background: var(--code-background-color);
 }
 
@@ -1294,9 +1289,11 @@ img.avatar {
     line-height: 1.4;
     color: var(--foreground-color);
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
 }
 
 .video-card-date {
