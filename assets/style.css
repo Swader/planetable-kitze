@@ -118,7 +118,7 @@ a:visited,
 a:active {
     color: var(--link-color);
     text-decoration: none;
-    line-break: anywhere;
+    /* line-break: anywhere; */
 }
 
 a:hover {
@@ -332,7 +332,7 @@ hr {
 /* Blog grid tiles */
 .blog-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
 }
 
