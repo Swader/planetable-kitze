@@ -50,21 +50,56 @@
           };
         }
 
+        let knownInternalPaths = ['/tags', '/archive', '/videos', '/podcasts', '/video', '/podcast'];
+
+        function normalizePath(path) {
+          if (!path) return '/';
+          return path.length > 1 ? path.replace(/\/+$/, '') : path;
+        }
+
+        function collectKnownInternalPaths(items) {
+          const paths = new Set(knownInternalPaths);
+
+          items.forEach((item) => {
+            if (!item || item.visible === false) return;
+            if (item.type === 'user' || item.type === 'theme' || item.type === 'link') return;
+
+            const href = computeHref(item);
+            if (!href) return;
+
+            try {
+              const url = new URL(href, window.location.origin);
+              if (url.origin !== window.location.origin) return;
+
+              const path = normalizePath(url.pathname);
+
+              // Root index/blog route should not suppress itself.
+              if (path === '/') return;
+
+              paths.add(path);
+            } catch (e) {
+              console.error('Known path collection error:', e);
+            }
+          });
+
+          return Array.from(paths);
+        }
+
         function setActiveState(anchor, href, itemType, itemId) {
           if (!href) return;
           
           try {
-            const here = window.location.pathname;
+            const here = normalizePath(window.location.pathname);
             const url = new URL(href, window.location.origin);
-            const targetPath = url.pathname;
+            const targetPath = normalizePath(url.pathname);
             const isExternal = url.origin !== window.location.origin;
             
             // Skip external links
             if (isExternal) return;
             
             // If on /home/ -> ONLY activate home icon
-            if (here.includes('/home/')) {
-              if (targetPath.includes('/home/')) {
+            if (here === '/home') {
+              if (targetPath === '/home') {
                 anchor.classList.add('is-active');
               }
               return; // Don't check anything else
@@ -72,10 +107,9 @@
             
             // Blog icon (root /) - activate if on root OR any blog post
             if (targetPath === '/' || targetPath === '') {
-              // Check if we're NOT on a known page or tag page
-              const knownPages = ['/projects/', '/tools/', '/tags', '/archive', '/videos/', '/podcasts/', '/video', '/podcast'];
-              const isKnownPage = knownPages.some(page => here.includes(page));
-              const isTagHtml = here.match(/\/[^\/]+\.html$/);
+              // Activate root only if we're not on a configured internal page or tag page.
+              const isKnownPage = knownInternalPaths.includes(here);
+              const isTagHtml = /\/[^\/]+\.html$/.test(window.location.pathname);
               
               if (!isKnownPage && !isTagHtml) {
                 anchor.classList.add('is-active');
@@ -84,7 +118,7 @@
             }
             
             // All other routes - simple startsWith match
-            if (here.includes(targetPath.replace(/\/$/, ''))) {
+            if (here === targetPath || here.startsWith(targetPath + '/')) {
               anchor.classList.add('is-active');
             }
           } catch (e) {
@@ -172,6 +206,8 @@
         function renderFromConfig(conf) {
           const items = (conf && conf.sidebar) || [];
           if (!items.length) return;
+
+          knownInternalPaths = collectKnownInternalPaths(items);
 
           document.body.classList.add('kitze-enabled');
 
@@ -376,4 +412,3 @@
     {% if custom_code_body_end.count > 0 %}{{ custom_code_body_end }}{% endif %}
   </body>
 </html>
-

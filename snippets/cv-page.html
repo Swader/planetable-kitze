@@ -1,0 +1,535 @@
+<style>
+.cv-page {
+max-width: 980px;
+margin: 0 auto 80px;
+}
+
+.cv-hero {
+display: grid;
+grid-template-columns: minmax(0, 1.7fr) 220px;
+gap: 24px;
+align-items: start;
+padding: 28px;
+border: 1px solid var(--border-color);
+border-radius: 24px;
+background: var(--background-color);
+box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+margin-bottom: 40px;
+}
+
+.cv-kicker {
+font-size: 0.78rem;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--foreground-secondary-color);
+margin-bottom: 10px;
+}
+
+.cv-name {
+margin: 0;
+font-size: clamp(2.2rem, 4vw, 3.5rem);
+line-height: 1.02;
+}
+
+.cv-tagline {
+margin: 12px 0 0;
+font-size: 1.06rem;
+line-height: 1.7;
+color: var(--foreground-secondary-color);
+}
+
+.cv-links {
+display: flex;
+flex-wrap: wrap;
+gap: 10px 16px;
+margin-top: 18px;
+font-size: 0.95rem;
+}
+
+.cv-links a {
+color: var(--foreground-color);
+text-decoration: none;
+border-bottom: 1px solid var(--border-color);
+}
+
+.cv-summary {
+margin-top: 22px;
+font-size: 1rem;
+line-height: 1.85;
+}
+
+.cv-actions {
+display: flex;
+flex-wrap: wrap;
+gap: 12px;
+margin-top: 24px;
+}
+
+.cv-button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+padding: 12px 16px;
+border-radius: 999px;
+text-decoration: none;
+font-weight: 600;
+border: 1px solid var(--border-color);
+background: var(--secondary-background-color);
+color: var(--foreground-color);
+cursor: pointer;
+}
+
+.cv-button-primary {
+background: var(--foreground-color);
+color: var(--background-color);
+border-color: var(--foreground-color);
+}
+
+.cv-button:hover {
+text-decoration: none;
+transform: translateY(-1px);
+}
+
+.cv-print-note {
+margin-top: 10px;
+font-size: 0.88rem;
+color: var(--foreground-secondary-color);
+}
+
+.cv-photo-shell {
+border: 1px solid var(--border-color);
+border-radius: 24px;
+padding: 10px;
+background: var(--secondary-background-color);
+}
+
+.cv-photo {
+display: block;
+width: 100%;
+aspect-ratio: 1 / 1.15;
+object-fit: cover;
+border-radius: 16px;
+}
+
+.cv-photo-caption {
+margin-top: 10px;
+font-size: 0.84rem;
+text-align: center;
+color: var(--foreground-secondary-color);
+}
+
+.cv-role-list {
+display: grid;
+gap: 16px;
+}
+
+.cv-role {
+border: 1px solid var(--border-color);
+border-radius: 20px;
+padding: 22px;
+background: var(--background-color);
+box-shadow: 0 10px 28px rgba(0, 0, 0, 0.04);
+}
+
+.cv-role-top {
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+gap: 18px;
+flex-wrap: wrap;
+}
+
+.cv-role-title {
+margin: 0;
+font-size: 1.08rem;
+line-height: 1.35;
+}
+
+.cv-role-company {
+margin-top: 4px;
+color: var(--foreground-secondary-color);
+font-size: 0.95rem;
+}
+
+.cv-role-dates {
+font-size: 0.92rem;
+color: var(--foreground-secondary-color);
+white-space: nowrap;
+}
+
+.cv-role-listing {
+margin: 14px 0 0;
+padding-left: 18px;
+}
+
+.cv-role-listing li + li {
+margin-top: 8px;
+}
+
+.cv-grid-2 {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 16px;
+}
+
+.cv-card {
+border: 1px solid var(--border-color);
+border-radius: 20px;
+padding: 22px;
+background: var(--background-color);
+box-shadow: 0 10px 28px rgba(0, 0, 0, 0.04);
+}
+
+.cv-card h3 {
+margin-top: 0;
+margin-bottom: 10px;
+}
+
+.cv-card p:last-child {
+margin-bottom: 0;
+}
+
+.cv-skill-group + .cv-skill-group {
+margin-top: 14px;
+}
+
+.cv-skill-label {
+display: block;
+font-size: 0.82rem;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: var(--foreground-secondary-color);
+margin-bottom: 8px;
+}
+
+.cv-skill-pills {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+}
+
+.cv-pill {
+display: inline-flex;
+align-items: center;
+padding: 6px 10px;
+border-radius: 999px;
+border: 1px solid var(--border-color);
+background: var(--secondary-background-color);
+font-size: 0.9rem;
+line-height: 1.2;
+}
+
+@media screen and (max-width: 860px) {
+.cv-hero {
+grid-template-columns: 1fr;
+}
+
+.cv-photo-shell {
+max-width: 240px;
+}
+
+.cv-grid-2 {
+grid-template-columns: 1fr;
+}
+}
+
+@media print {
+@page {
+size: A4;
+margin: 12mm;
+}
+
+#kitze-sidebar,
+#kitze-midbar,
+#kitze-overlay,
+#kitze-sheet,
+.mobile-bar,
+.nav-container,
+#footer {
+display: none !important;
+}
+
+.layout {
+grid-template-columns: 1fr !important;
+}
+
+.main {
+padding: 0 !important;
+}
+
+.cv-page {
+max-width: none;
+margin: 0;
+}
+
+.cv-actions,
+.cv-print-note {
+display: none !important;
+}
+
+.cv-hero,
+.cv-role,
+.cv-card,
+.project-section {
+box-shadow: none !important;
+break-inside: avoid;
+page-break-inside: avoid;
+}
+
+a {
+color: inherit !important;
+text-decoration: none !important;
+}
+}
+</style>
+
+<div class="cv-page">
+<section class="cv-hero">
+<div>
+<div class="cv-kicker">CV / AI Systems / Platform Engineering</div>
+<h1 class="cv-name">Bruno Škvorc</h1>
+<p class="cv-tagline">Senior engineer and technical educator focused on AI-integrated systems, data pipelines, platform engineering, and turning messy ideas into production software that survives contact with reality.</p>
+<div class="cv-links">
+<a href="mailto:bruno@bitfalls.com">bruno@bitfalls.com</a>
+<a href="https://bruno.id" target="_blank">bruno.id</a>
+<a href="https://github.com/Swader" target="_blank">github.com/Swader</a>
+<a href="https://www.linkedin.com/in/swader" target="_blank">linkedin.com/in/swader</a>
+</div>
+<p class="cv-summary">I have spent 15+ years building production systems, developer platforms, content systems, and high-throughput data pipelines. Right now my work sits at the intersection of product engineering, infrastructure ownership, and AI-assisted development: LLM-driven workflows, agent tooling, deterministic rendering, event indexing, and shipping features end to end without turning the stack into a science project.</p>
+<div class="cv-actions">
+<button type="button" class="cv-button cv-button-primary" onclick="downloadCVPDF()">Download PDF</button>
+<a class="cv-button" href="mailto:bruno@bitfalls.com">Contact Me</a>
+<a class="cv-button" href="https://github.com/Swader" target="_blank">GitHub</a>
+</div>
+<div class="cv-print-note">The PDF button uses the browser print flow on purpose. It keeps the output selectable, lightweight, and much more reliable than client-side HTML-to-PDF libraries on a static site.</div>
+</div>
+<div class="cv-photo-shell">
+<img class="cv-photo" src="../avatar.png" alt="Bruno Škvorc" onerror="this.onerror=null;this.src='https://avatars.githubusercontent.com/u/1430603?v=4';">
+<div class="cv-photo-caption">Uses your Planet avatar if available, with a GitHub fallback.</div>
+</div>
+</section>
+
+<section class="project-section">
+<div class="project-section-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M20 7h-9"/>
+<path d="M14 17H5"/>
+<circle cx="17" cy="17" r="3"/>
+<circle cx="7" cy="7" r="3"/>
+</svg>
+<h2>Experience</h2>
+</div>
+<div class="cv-role-list">
+<article class="cv-role">
+<div class="cv-role-top">
+<div>
+<h3 class="cv-role-title">Platform Engineer and AI Systems Builder</h3>
+<div class="cv-role-company">Independent / Bitfalls d.o.o.</div>
+</div>
+<div class="cv-role-dates">April 2017 - Present</div>
+</div>
+<ul class="cv-role-listing">
+<li>Architect and ship production applications with integrated AI capabilities across monitoring, docs tooling, desktop apps, and automated content or ops pipelines.</li>
+<li>Build agent-based workflows using LLM APIs for code generation, QA checklists, release drafting, prototyping, and internal automation.</li>
+<li>Ship full-stack features across API, UI, storage, deployment, and monitoring layers, usually with Bun or TypeScript tooling around Rust and Go services.</li>
+<li>Current product focus includes Kvasyr, Ogmadocs, Bitfalls Apps, x402watch, and commercial macOS utilities.</li>
+</ul>
+</article>
+
+<article class="cv-role">
+<div class="cv-role-top">
+<div>
+<h3 class="cv-role-title">Systems Engineer / Platform Lead</h3>
+<div class="cv-role-company">RMRK</div>
+</div>
+<div class="cv-role-dates">August 2020 - October 2023; January 2026 - Present</div>
+</div>
+<ul class="cv-role-listing">
+<li>Built Kvasyr, a high-throughput Rust indexer that ingests event streams, normalizes heterogeneous data, and serves queryable views for product surfaces processing millions of events daily.</li>
+<li>Implemented a deterministic rendering pipeline for deeply nested composable NFTs so output stays canonical, cacheable, and fast to retrieve.</li>
+<li>Help maintain the broader modular NFT stack around RMRK standards, including marketplace, renderer, indexer, and downstream integration tooling.</li>
+<li>Reduced operational complexity by replacing brittle third-party dependencies with owned services and cleaner API boundaries.</li>
+</ul>
+</article>
+
+<article class="cv-role">
+<div class="cv-role-top">
+<div>
+<h3 class="cv-role-title">Developer Experience Engineer</h3>
+<div class="cv-role-company">Polygon Technology</div>
+</div>
+<div class="cv-role-dates">May 2024 - January 2026</div>
+</div>
+<ul class="cv-role-listing">
+<li>Produced developer enablement content including tutorials, workshops, videos, and reference implementations.</li>
+<li>Led internal dogfooding across SDKs, docs, and onboarding flows and fed the resulting pain points directly back into engineering and product.</li>
+<li>Supported developers at events and hackathons and translated recurring community friction into actionable fixes.</li>
+</ul>
+</article>
+
+<article class="cv-role">
+<div class="cv-role-top">
+<div>
+<h3 class="cv-role-title">Developer Champion / SDK Engineer</h3>
+<div class="cv-role-company">Diffbot</div>
+</div>
+<div class="cv-role-dates">July 2014 - Present (part-time)</div>
+</div>
+<ul class="cv-role-listing">
+<li>Maintain and extend the official PHP client library used by customers integrating large-scale extraction and knowledge graph APIs.</li>
+<li>Write documentation, build demos, and help customers debug integrations, performance issues, and product fit questions.</li>
+</ul>
+</article>
+
+<article class="cv-role">
+<div class="cv-role-top">
+<div>
+<h3 class="cv-role-title">Platform, DevRel, and Editorial Roles</h3>
+<div class="cv-role-company">Web3 Foundation, Status, SitePoint, InTech, and related teams</div>
+</div>
+<div class="cv-role-dates">2010 - 2021</div>
+</div>
+<ul class="cv-role-listing">
+<li>Produced hundreds of technical articles, talks, tutorials, and workshops across web development, blockchain, and developer tooling.</li>
+<li>Built backend systems for publishing, parsing, workflow orchestration, job queues, and third-party integrations serving editorial and product teams.</li>
+<li>Managed technical writing quality, mentored writers, and helped shape developer-facing narratives around complex systems.</li>
+</ul>
+</article>
+</div>
+</section>
+
+<section class="project-section">
+<div class="project-section-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 2v4"/>
+<path d="m16.2 7.8 2.9-2.9"/>
+<path d="M18 12h4"/>
+<path d="m16.2 16.2 2.9 2.9"/>
+<path d="M12 18v4"/>
+<path d="m4.9 19.1 2.9-2.9"/>
+<path d="M2 12h4"/>
+<path d="m4.9 4.9 2.9 2.9"/>
+</svg>
+<h2>Selected Projects</h2>
+</div>
+<div class="cv-grid-2">
+<article class="cv-card">
+<h3>Kvasyr</h3>
+<p>Managed EVM indexing and webhook infrastructure. Built to give product teams queryable event views and reliable delivery without forcing them to own the entire pipeline.</p>
+</article>
+<article class="cv-card">
+<h3>RMRK Stack</h3>
+<p>Modular NFT standards plus the infrastructure that makes them usable in practice: marketplace, indexer, renderer, integrations, and product surfaces.</p>
+</article>
+<article class="cv-card">
+<h3>Ogmadocs</h3>
+<p>WYSIWYG docs tooling for product teams that need fast iteration, cleaner workflows, and less operational drag around content ownership.</p>
+</article>
+<article class="cv-card">
+<h3>Bitfalls Apps</h3>
+<p>Commercial macOS utilities including AgentView and Screenshot Blur, built around small sharp problems, good UX, and direct monetization.</p>
+</article>
+</div>
+</section>
+
+<section class="project-section">
+<div class="project-section-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 20v-6"/>
+<path d="M6 20V10"/>
+<path d="M18 20V4"/>
+</svg>
+<h2>Technical Focus</h2>
+</div>
+<div class="cv-grid-2">
+<article class="cv-card">
+<div class="cv-skill-group">
+<span class="cv-skill-label">Languages</span>
+<div class="cv-skill-pills">
+<span class="cv-pill">TypeScript</span>
+<span class="cv-pill">JavaScript</span>
+<span class="cv-pill">SQL</span>
+<span class="cv-pill">PHP</span>
+<span class="cv-pill">Go</span>
+<span class="cv-pill">Python</span>
+<span class="cv-pill">Rust</span>
+</div>
+</div>
+<div class="cv-skill-group">
+<span class="cv-skill-label">Systems</span>
+<div class="cv-skill-pills">
+<span class="cv-pill">Event pipelines</span>
+<span class="cv-pill">Indexing</span>
+<span class="cv-pill">Caching</span>
+<span class="cv-pill">Concurrency</span>
+<span class="cv-pill">Background jobs</span>
+<span class="cv-pill">Deterministic rendering</span>
+</div>
+</div>
+</article>
+<article class="cv-card">
+<div class="cv-skill-group">
+<span class="cv-skill-label">AI and LLM</span>
+<div class="cv-skill-pills">
+<span class="cv-pill">LLM integration</span>
+<span class="cv-pill">Agent workflows</span>
+<span class="cv-pill">Prompt engineering</span>
+<span class="cv-pill">AI-assisted development</span>
+<span class="cv-pill">Eval-driven iteration</span>
+</div>
+</div>
+<div class="cv-skill-group">
+<span class="cv-skill-label">Infrastructure</span>
+<div class="cv-skill-pills">
+<span class="cv-pill">Linux</span>
+<span class="cv-pill">CI/CD</span>
+<span class="cv-pill">Monitoring</span>
+<span class="cv-pill">API design</span>
+<span class="cv-pill">MySQL</span>
+<span class="cv-pill">SQLite</span>
+<span class="cv-pill">PostgreSQL</span>
+<span class="cv-pill">IPFS</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+
+<section class="project-section">
+<div class="project-section-icon">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+</svg>
+<h2>Education and Extras</h2>
+</div>
+<div class="cv-grid-2">
+<article class="cv-card">
+<h3>Education</h3>
+<p><strong>MSc, Computer Science</strong><br>University of Rijeka, Croatia</p>
+</article>
+<article class="cv-card">
+<h3>About Me</h3>
+<p>Father of three, lifelong learner and teacher, amateur SCUBA diver, writer, and chronic tester of bleeding-edge technology before most people should probably touch it.</p>
+</article>
+</div>
+</section>
+</div>
+
+<script>
+(function () {
+const originalTitle = document.title;
+window.downloadCVPDF = function () {
+const previousTitle = document.title;
+document.title = 'Bruno-Skvorc-CV';
+window.print();
+setTimeout(function () {
+document.title = previousTitle;
+}, 1000);
+};
+window.addEventListener('afterprint', function () {
+document.title = originalTitle;
+});
+})();
+</script>
