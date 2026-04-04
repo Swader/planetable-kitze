@@ -50,6 +50,114 @@
           };
         }
 
+        function normalizeTagKey(tag) {
+          return (tag || '').trim().toLowerCase();
+        }
+
+        function buildTagHelpers() {
+          const config = window.KITZE_TAG_CONFIG || {};
+          const aliases = {};
+          const labels = {};
+
+          Object.entries(config.aliases || {}).forEach(([from, to]) => {
+            const fromKey = normalizeTagKey(from);
+            const toKey = normalizeTagKey(to);
+            if (!fromKey || !toKey) return;
+            aliases[fromKey] = toKey;
+          });
+
+          Object.entries(config.labels || {}).forEach(([slug, label]) => {
+            const key = normalizeTagKey(slug);
+            if (!key || !label) return;
+            labels[key] = label;
+          });
+
+          const hiddenQuickAccessTags = new Set(
+            (config.hiddenQuickAccessTags || []).map(normalizeTagKey).filter(Boolean)
+          );
+
+          const hiddenTagCloudTags = new Set(
+            (config.hiddenTagCloudTags || []).map(normalizeTagKey).filter(Boolean)
+          );
+
+          function canonicalizeTag(tag) {
+            const key = normalizeTagKey(tag);
+            return aliases[key] || key;
+          }
+
+          function displayTag(tag) {
+            const key = normalizeTagKey(tag);
+            const canonical = canonicalizeTag(key);
+            return labels[key] || labels[canonical] || canonical || tag;
+          }
+
+          return {
+            aliases,
+            labels,
+            hiddenQuickAccessTags,
+            hiddenTagCloudTags,
+            normalizeTagKey,
+            canonicalizeTag,
+            displayTag
+          };
+        }
+
+        function getTagSlugFromHref(href) {
+          if (!href) return '';
+
+          try {
+            const url = new URL(href, window.location.origin);
+            const filename = url.pathname.split('/').filter(Boolean).pop() || '';
+            return filename.replace(/\.html$/, '');
+          } catch (e) {
+            return '';
+          }
+        }
+
+        function decorateTags() {
+          const tagHelpers = buildTagHelpers();
+          window.KITZE_TAG_HELPERS = tagHelpers;
+
+          document.querySelectorAll('.blog-card-tag').forEach((el) => {
+            el.textContent = tagHelpers.displayTag(el.textContent);
+          });
+
+          document.querySelectorAll('.tag-item').forEach((el) => {
+            const slug = getTagSlugFromHref(el.href) || el.textContent;
+            el.textContent = tagHelpers.displayTag(slug);
+          });
+
+          document.querySelectorAll('.tag-cloud-item').forEach((item) => {
+            const link = item.querySelector('a');
+            if (!link) return;
+
+            const slug = normalizeTagKey(getTagSlugFromHref(link.href));
+            const canonical = tagHelpers.canonicalizeTag(slug);
+            const shouldHide = tagHelpers.hiddenTagCloudTags.has(slug) || canonical !== slug;
+
+            if (shouldHide) {
+              item.style.display = 'none';
+              return;
+            }
+
+            link.textContent = tagHelpers.displayTag(slug);
+          });
+
+          const tagCloud = document.querySelector('.tag-cloud');
+          const tagCloudCount = document.querySelector('.tag-container .tag-count');
+          if (tagCloud && tagCloudCount) {
+            const visibleItems = Array.from(tagCloud.querySelectorAll('.tag-cloud-item'))
+              .filter((item) => item.style.display !== 'none')
+              .length;
+            tagCloudCount.textContent = `${visibleItems} tag${visibleItems === 1 ? '' : 's'}`;
+          }
+
+          const tagTitle = document.querySelector('.tag-caption + .tag-title');
+          if (tagTitle) {
+            tagTitle.textContent = tagHelpers.displayTag(tagTitle.textContent);
+          }
+        }
+
         let knownInternalPaths = ['/tags', '/archive', '/videos', '/podcasts', '/video', '/podcast'];
 
         function normalizePath(path) {
@@ -364,6 +472,8 @@
             sheetEl.appendChild(grid);
             wireSheetControls();
           }
+
+          decorateTags();
         }
 
         // Check for inline config first (from custom code in head)
@@ -376,6 +486,8 @@
             .then((j) => j && renderFromConfig(j))
             .catch(() => {});
         }
+
+        decorateTags();
       });
     </script>
     {% if has_avatar %}

@@ -3,12 +3,62 @@
 A Planetable theme inspired by [kitze.io](https://kitze.io) featuring a 3-column
 layout with sidebar navigation, profile mid-bar, and main content area.
 
+## Feature Overview
+
+- 3-column desktop layout with a dedicated sidebar, profile mid-bar, and content column
+- Responsive collapse from desktop to tablet to mobile bottom-sheet navigation
+- Config-driven icon sidebar with user avatar, page, tag, external-link, and theme-toggle items
+- Route-aware sidebar active states derived from your configured internal pages and tags
+- Profile mid-bar with social links, stats, upcoming appearances, project links, and CTA buttons
+- Paginated blog index with optional hero images, audio/video badges, and quick-access tag filtering
+- Generated tag pages, tag cloud, and archive page support
+- Alias-aware tag display and optional tag hiding through `window.KITZE_TAG_CONFIG`
+- Optional video gallery helper for YouTube pages
+- Reusable project-card layout classes for rich custom pages
+- Included paste-ready `projects` and `cv` snippets under `snippets/`
+
 ## Layout Structure
 
 - **Sidebar** (left, 80px): Icon-based navigation with hover tooltips
 - **Mid-bar** (center, 400px): Profile, stats, upcoming events, projects
 - **Main** (right): Blog posts and page content
 - **Mobile**: Bottom sheet menu with hamburger toggle
+
+## Built-In Pages and Behaviors
+
+`template.json` already enables the Planet features this theme expects:
+
+- `generateIndexPagination: true`
+- `generateTagPages: true`
+- `generateArchive: true`
+
+Out of the box, the theme styles and supports:
+
+- **Blog index**: post cards, pagination, quick-access tags, video/audio badges, hero images
+- **Single posts**: article tags, SEO modules, responsive content chrome
+- **Tag pages**: tag title, article count, filtered index view
+- **Tags overview**: tag cloud page rendered from Planet's generated tags
+- **Archive**: generated archive page
+- **Custom pages**: any Planet page rendered in the main content column
+
+### Quick-Access Tag Filter
+
+The main blog index automatically scans the visible cards and renders a tag
+filter bar above them.
+
+- Uses multi-select filtering with AND logic
+- Hides the internal `blog` tag automatically
+- Respects tag aliases and hidden quick-access tags from `window.KITZE_TAG_CONFIG`
+
+### Sidebar Active-State Rules
+
+The sidebar resolves active states from the actual configured internal routes,
+instead of from a fixed hardcoded page list.
+
+- The root/blog item is active on the site root and normal post pages
+- Configured pages such as `/projects/`, `/cv/`, or `/writing/` win over the root/blog item
+- Tag items stay active on their generated tag routes
+- External links, theme toggle, and avatar entries never receive active state
 
 ## Configuration Files
 
@@ -44,7 +94,8 @@ Controls the left sidebar navigation items:
 **Item Types:**
 
 - `user` - Shows user avatar (auto-loads from Planet's uploaded avatar)
-- `home`/`index` - Links to site root or blog index
+- `index` - Links to the site root / blog index
+- `home` - Legacy alias for `index`
 - `page` - Links to a Page by `slug` (or `id` fallback)
 - `tag` - Links to tag listing (requires `generateTagPages: true` in `template.json`)
 - `link` - External URL (opens in new tab)
@@ -54,13 +105,14 @@ Controls the left sidebar navigation items:
 
 - `separator: true` - Adds horizontal divider line before item
 - `visible: false` - Hides item without deleting from config
+- Sidebar active states are derived from configured page and tag destinations
 
 **Icons:**
 
 - Loaded from `assets/icons/{icon}` with fallback to `assets/{icon}`
 - Auto-adjusts color for light/dark themes
 
-### 2. Mid-Bar Content (`assets/kitze-midbar.json`)
+#### Mid-Bar Content (`assets/kitze-midbar.json`)
 
 Controls the center profile column content:
 
@@ -68,7 +120,9 @@ Controls the center profile column content:
 {
   "stats": {
     "followers": "74.5K",
+    "followersUrl": "https://x.com/yourhandle",
     "subscribers": "7.5K",
+    "subscribersUrl": "https://youtube.com/@yourchannel",
     "views": "251K"
   },
   "upcoming": [
@@ -116,6 +170,7 @@ Controls the center profile column content:
 2. **Stats** - Display custom metrics:
    - Followers, Subscribers, Views
    - Any 3 metrics you want to track
+   - Optional `followersUrl`, `subscribersUrl`, `viewsUrl` make stat cards clickable
 
 3. **Upcoming** - Events list (up to 10 items):
    - Conference talks
@@ -194,6 +249,23 @@ window.KITZE_MIDBAR_CONFIG = {
 </script>
 ```
 
+**Tag Configuration:**
+
+```html
+<script>
+window.KITZE_TAG_CONFIG = {
+  hiddenQuickAccessTags: ['psychedelics'],
+  hiddenTagCloudTags: ['internal-only'],
+  aliases: {
+    'artifical-intelligence': 'artificial-intelligence'
+  },
+  labels: {
+    'artificial-intelligence': 'Artificial Intelligence'
+  }
+};
+</script>
+```
+
 **Benefits:**
 
 - Change config without editing files
@@ -202,6 +274,22 @@ window.KITZE_MIDBAR_CONFIG = {
 - Config managed in Planet UI
 
 **Priority:** Custom code config takes precedence over JSON files.
+
+### Tag Customization
+
+`window.KITZE_TAG_CONFIG` lets you tune tag presentation without rewriting old
+content.
+
+- `hiddenQuickAccessTags` hides tags from the quick-access filter on the main blog page only
+- `hiddenTagCloudTags` hides tags from the `/tags` cloud only
+- `aliases` collapses typo or legacy slugs into a canonical slug for display/filtering
+- `labels` overrides the visible label shown for a slug
+
+Hidden quick-access tags still work on article tag pills and direct tag-page URLs.
+
+This is a display-layer tool. If your content contains multiple actual tag
+slugs, Planet will still generate separate static tag pages until you clean up
+the source article tags themselves.
 
 ## Video Gallery
 
@@ -251,6 +339,16 @@ window.KITZE_VIDEOS = {
 - `id` (required): YouTube video ID
 - `date` (optional): Display date
 - `categories` (optional): Array of category tags for filtering
+
+## Included Snippets
+
+The repo ships with paste-ready page snippets under `snippets/`:
+
+- `snippets/projects-page.html` - opinionated multi-section projects page using the theme's project-card system
+- `snippets/cv-page.html` - CV/resume page with top-right photo slot, print-friendly styling, and a `Download PDF` button that calls `window.print()`
+
+These are not auto-rendered by the theme. Paste them into Planet page content
+and adapt the copy to your site.
 
 ## Project Card View
 
@@ -386,3 +484,10 @@ The theme automatically uses these Planet variables:
 - `custom_code_head` - Custom JavaScript/CSS injection
 - `custom_code_body_start` - Custom code at body start
 - `custom_code_body_end` - Custom code at body end
+
+## Practical Notes
+
+- If Planet treats pasted HTML as code, remove indentation before pasting
+- Keep `generateTagPages` enabled if you use sidebar tag items or rely on tag links
+- Validate JSON config files with `jq '.' assets/kitze.config.json` and `jq '.' assets/kitze-midbar.json`
+- After JavaScript changes, verify sidebar active states, tag filters, the theme toggle, and mobile sheet dismissal in Planet preview

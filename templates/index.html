@@ -70,6 +70,12 @@
   document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.blog-card');
     const filterContainer = document.getElementById('blog-tag-filter');
+    const tagHelpers = window.KITZE_TAG_HELPERS || {
+      normalizeTagKey: (tag) => (tag || '').trim().toLowerCase(),
+      canonicalizeTag: (tag) => (tag || '').trim().toLowerCase(),
+      displayTag: (tag) => (tag || '').trim(),
+      hiddenQuickAccessTags: new Set()
+    };
     
     // Collect all unique tags (excluding "blog")
     const allTags = new Set();
@@ -77,9 +83,11 @@
       const tags = card.getAttribute('data-tags');
       if (tags) {
         tags.split(',').forEach(tag => {
-          const trimmed = tag.trim();
-          if (trimmed && trimmed !== 'blog') {
-            allTags.add(trimmed);
+          const normalized = tagHelpers.normalizeTagKey(tag);
+          const canonical = tagHelpers.canonicalizeTag(normalized);
+
+          if (canonical && canonical !== 'blog' && !tagHelpers.hiddenQuickAccessTags.has(canonical)) {
+            allTags.add(canonical);
           }
         });
       }
@@ -95,7 +103,7 @@
     const tagButtons = Array.from(allTags).sort().map(tag => {
       const btn = document.createElement('button');
       btn.className = 'blog-tag-btn';
-      btn.textContent = tag;
+      btn.textContent = tagHelpers.displayTag(tag);
       btn.setAttribute('data-tag', tag);
       
       btn.addEventListener('click', () => {
@@ -121,7 +129,10 @@
       } else {
         // Show only posts that have ALL active tags
         cards.forEach(card => {
-          const cardTags = card.getAttribute('data-tags').split(',').map(t => t.trim());
+          const cardTags = card.getAttribute('data-tags')
+            .split(',')
+            .map(t => tagHelpers.canonicalizeTag(t))
+            .filter(Boolean);
           const hasAllTags = Array.from(activeTags).every(tag => cardTags.includes(tag));
           card.style.display = hasAllTags ? 'flex' : 'none';
         });
