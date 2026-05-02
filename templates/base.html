@@ -26,6 +26,22 @@
         const overlayEl = document.getElementById('kitze-overlay');
         const sheetEl = document.getElementById('kitze-sheet');
         const menuBtn = document.getElementById('kitze-menu');
+        const topLevelIconNames = new Set([
+          'book.svg',
+          'book2.svg',
+          'checkmark.circle.fill.svg',
+          'circle.svg',
+          'discord.svg',
+          'github.svg',
+          'juicebox.svg',
+          'microphone.svg',
+          'paperclip.svg',
+          'podcast.svg',
+          'rss.svg',
+          'telegram.svg',
+          'twitter.svg',
+          'video.svg'
+        ]);
 
         function computeHref(item) {
           if (item.type === 'home' || item.type === 'index') return assetsPrefix;
@@ -41,8 +57,24 @@
         }
 
         function createIcon(img, icon) {
-          const iconPathPrimary = assetsPrefix + 'assets/icons/' + icon;
-          const iconPathFallback = assetsPrefix + 'assets/' + icon;
+          const rawIcon = icon || '';
+          if (/^(?:https?:)?\/\//.test(rawIcon) || rawIcon.startsWith('data:')) {
+            img.onerror = null;
+            img.src = rawIcon;
+            return;
+          }
+
+          const iconName = rawIcon.replace(/^assets\//, '');
+          if (iconName.includes('/')) {
+            img.onerror = null;
+            img.src = assetsPrefix + 'assets/' + iconName;
+            return;
+          }
+
+          const primaryFolder = topLevelIconNames.has(iconName) ? 'assets/' : 'assets/icons/';
+          const fallbackFolder = primaryFolder === 'assets/icons/' ? 'assets/' : 'assets/icons/';
+          const iconPathPrimary = assetsPrefix + primaryFolder + iconName;
+          const iconPathFallback = assetsPrefix + fallbackFolder + iconName;
           img.src = iconPathPrimary;
           img.onerror = () => {
             img.onerror = null;
