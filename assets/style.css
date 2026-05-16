@@ -188,6 +188,7 @@ h2 {
     display: block;
     margin: 40px auto 40px auto;
     max-width: 100%;
+    height: auto;
 }
 
 hr {
